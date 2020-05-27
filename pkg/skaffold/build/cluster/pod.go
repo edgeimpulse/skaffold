@@ -74,6 +74,7 @@ func (b *Builder) kanikoPodSpec(artifact *latest.KanikoArtifact, tag string) (*v
 					EmptyDir: &v1.EmptyDirVolumeSource{},
 				},
 			}},
+			NodeSelector: map[string]string{"nodegroup-type": "primary"},
 		},
 	}
 
