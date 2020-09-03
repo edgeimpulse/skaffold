@@ -56,7 +56,17 @@ func (b *Builder) kanikoPodSpec(artifact *latest.KanikoArtifact, tag string) (*v
 				ImagePullPolicy: v1.PullIfNotPresent,
 				Command:         []string{"sh", "-c", "while [ ! -f /tmp/complete ]; do sleep 1; done"},
 				VolumeMounts:    []v1.VolumeMount{vm},
-				Resources:       resourceRequirements(b.ClusterDetails.Resources),
+				Resources: v1.ResourceRequirements{
+					Limits: v1.ResourceList{
+						v1.ResourceCPU:    resource.MustParse("1.0"),
+						v1.ResourceMemory: resource.MustParse("4096Mi"),
+					},
+					Requests: v1.ResourceList{
+						v1.ResourceCPU:    resource.MustParse("0.5"),
+						v1.ResourceMemory: resource.MustParse("2048Mi"),
+					},
+				},
+				// Resources:       resourceRequirements(b.ClusterDetails.Resources),
 			}},
 			Containers: []v1.Container{{
 				Name:            constants.DefaultKanikoContainerName,
@@ -65,7 +75,17 @@ func (b *Builder) kanikoPodSpec(artifact *latest.KanikoArtifact, tag string) (*v
 				Args:            args,
 				Env:             env(artifact, b.ClusterDetails.HTTPProxy, b.ClusterDetails.HTTPSProxy),
 				VolumeMounts:    []v1.VolumeMount{vm},
-				Resources:       resourceRequirements(b.ClusterDetails.Resources),
+				Resources: v1.ResourceRequirements{
+					Limits: v1.ResourceList{
+						v1.ResourceCPU:    resource.MustParse("1.0"),
+						v1.ResourceMemory: resource.MustParse("4096Mi"),
+					},
+					Requests: v1.ResourceList{
+						v1.ResourceCPU:    resource.MustParse("0.5"),
+						v1.ResourceMemory: resource.MustParse("2048Mi"),
+					},
+				},
+				// Resources:       resourceRequirements(b.ClusterDetails.Resources),
 			}},
 			RestartPolicy: v1.RestartPolicyNever,
 			Volumes: []v1.Volume{{
